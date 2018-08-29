@@ -1,3 +1,3 @@
-const getDirectoryRoutes = require('./getDirectoryRoutes')
+const {expressRoutes, directoryRoutes} = require('./source')
 
-getDirectoryRoutes(__dirname + "/testDirectory", console.log)
+expressRoutes(__dirname + "/testDirectory", console.log)
