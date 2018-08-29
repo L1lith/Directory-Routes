@@ -9,10 +9,11 @@ function getExpressRoutes(directory, callback) {
       try {
         const routeEntries = Object.entries(routes)
         for (let i = 0; i < routeEntries.length; i++) {
-          const [path, route] = routeEntries[i]
-          if (typeof route != 'object' || route === null) throw new Error(`Route "${path}" must export an object`)
-          if (typeof route.call != 'function') throw new Error(`Route "${path}" must export a call function`)
-          router[route.method || 'get'](route.call)
+          const [route, data] = routeEntries[i]
+          if (typeof data != 'object' || data === null) throw new Error(`Route "${path}" must export an object`)
+          if (typeof data.call != 'function') throw new Error(`Route "${path}" must export a call function`)
+          if (data.hasOwnProperty('method') && data.method !== null && (typeof data.method != 'string' || data.method.length < 1)) throw new Error(`Route "${route}"'s method is invalid`)
+          router[data.method || 'get'](route, ...(Array.isArray(data.call) ? data.call : [data.call]))
         }
         resolve(router)
       } catch(error) {
