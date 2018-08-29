@@ -6,7 +6,7 @@ function getDirectoryRoutes(directory, callback) {
     const output = {}
     dirTree(directory, {extensions: /\.js$/}, item => {
       let route = relative(directory, item.path)
-      route = route.substring(0, itemPath.length - '.js'.length)
+      route = route.substring(0, route.length - '.js'.length)
       const data = require(item.path)
       output[route] = data
     })
