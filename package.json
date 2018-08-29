@@ -1,0 +1,34 @@
+{
+  "name": "directory-routes",
+  "version": "0.0.1",
+  "description": "HTTP Server Local Directory Routing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/L1lith/Directory-Routes.git"
+  },
+  "keywords": [
+    "directory",
+    "server",
+    "folder",
+    "folders",
+    "directories",
+    "express",
+    "server",
+    "route",
+    "routing",
+    "routes"
+  ],
+  "author": "L1lith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/L1lith/Directory-Routes/issues"
+  },
+  "homepage": "https://github.com/L1lith/Directory-Routes#readme",
+  "dependencies": {
+    "require-directory": "^2.1.1"
+  }
+}
