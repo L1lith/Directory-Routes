@@ -1,6 +1,6 @@
 {
   "name": "directory-routes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "HTTP Server Local Directory Routing",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/L1lith/Directory-Routes#readme",
   "dependencies": {
-    "directory-tree": "^2.1.0",
-    "express": "^4.16.3"
+    "directory-tree": "^2.1.0"
   }
 }
