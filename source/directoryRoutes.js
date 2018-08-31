@@ -3,12 +3,12 @@ const {relative} = require('path')
 
 function getDirectoryRoutes(directory, callback) {
   const result = new Promise((resolve, reject) => {
-    const output = {}
+    const output = []
     dirTree(directory, {extensions: /\.js$/}, item => {
       let route = relative(directory, item.path)
       route = route.substring(0, route.length - '.js'.length)
       const data = require(item.path)
-      output[route] = data
+      output.push([route, data])
     })
     resolve(output)
   })

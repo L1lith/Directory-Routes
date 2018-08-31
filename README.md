@@ -1,5 +1,5 @@
 # Directory Routes
-Directory Routes allows you to require modules in a folder deeply and map all exports to their full relative path to the required folder.
+Directory Routes allows you to require modules in a folder deeply and pair all exports with their relative path to the required folder.
 
 What is this good for? We can use this for very cleanly organizing our HTTP endpoints using file/directory structures.
 
@@ -10,7 +10,7 @@ Directory Routes allows you to require modules in a folder deeply and map all ex
 `npm i -s directory-routes`
 
 
-### HTTP Endpoints
+### Example
 What is this good for? We can use this for very cleanly organizing our HTTP endpoints using file/directory structures.
 
 For example let's say we have a folder called routes, and it has this directory structure
@@ -35,12 +35,13 @@ directoryRoutes(__dirname + '/routes', (err, routes) => {
 ```
 We should now see this from the routes being logged.
 ```js
-{
-	"/auth/login": (login export),
-    "/auth/signup": (signup export),
-    "/auth/logout": (logout export),
-    "/news/latest": (latest export),
-    "/news/between": (between export)
-}
+[
+    ["/auth/login", (login export)],
+    ["/auth/signup", (signup export)],
+    ["/auth/logout", (logout export)],
+    ["/news/latest", (latest export)],
+    ["/news/between", (between export)]
+]
 ```
+
 Additionally, Directory Routes returns a promise that you can use instead of a callback.
