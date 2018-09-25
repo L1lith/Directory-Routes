@@ -1,8 +1,8 @@
 {
   "name": "directory-routes",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "HTTP Server Local Directory Routing",
-  "main": "index.js",
+  "main": "source/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
