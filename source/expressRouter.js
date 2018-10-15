@@ -9,6 +9,18 @@ function expressRouter(path, callback) {
   const result = (async () => {
     const router = new Router()
     const routes = await directoryRoutes(path)
+    const routePromises = []
+    for (let i = 0; i < routes.length; i++) {
+      const route = routes[i]
+      const [path, output] = route
+      if (output instanceof Promise) {
+          routePromises.push([output, i])
+      }
+    }
+    await Promise.all(routePromises.map(async ([promise, index]) => {
+        routes[index][1] = await promise
+    }))
+
     routes.forEach(([path, output]) => {
       if (path === 'index') { // Router Hook
         if (typeof output != 'function') throw `Router Hook Must Be A Function`
@@ -35,8 +47,9 @@ function expressRouter(path, callback) {
     }).catch(err => {
       callback(err, null)
     })
+  } else {
+    return result
   }
-  return result
 }
 
 module.exports = expressRouter
