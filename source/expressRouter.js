@@ -9,6 +9,7 @@ function expressRouter(path, callback) {
   const result = (async () => {
     const router = new Router()
     const routes = await directoryRoutes(path)
+    console.log(routes)
     routes.forEach(([path, output]) => {
       if (path === 'index') { // Router Hook
         if (typeof output != 'function') throw `Router Hook Must Be A Function`
@@ -19,9 +20,9 @@ function expressRouter(path, callback) {
         if (!(typeof output.handler != 'function')) throw `Invalid Route Handler Property For Route ${JSON.stringify(path)}`
         if (output.hasOwnProperty('middleware') && (!Array.isArray(output.middleware) || output.middleware.some(middleware => typeof middleware != 'function'))) throw `Invalid Middleware For Route ${JSON.stringify(path)}`
         if (output.hasOwnProperty('method') && !validRouteMethods.includes(output.method)) throw `Invalid Route Method For Route ${JSON.stringify(path)}`
-        router[output.method || 'get'](...output.middleware || [], output.handler)
+        router[output.method || 'get']('/' + path, ...output.middleware || [], output.handler)
       } else if (typeof output == 'function') {
-        router.get(path, output)
+        router.get('/' + path, output)
       } else {
         throw `Invalid Route Handler for Route ${JSON.stringify(path)}`
       }
