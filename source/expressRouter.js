@@ -9,7 +9,6 @@ function expressRouter(path, callback) {
   const result = (async () => {
     const router = new Router()
     const routes = await directoryRoutes(path)
-    console.log(routes)
     routes.forEach(([path, output]) => {
       if (path === 'index') { // Router Hook
         if (typeof output != 'function') throw `Router Hook Must Be A Function`
