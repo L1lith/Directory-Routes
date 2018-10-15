@@ -17,9 +17,12 @@ function expressRouter(path, callback) {
           routePromises.push([output, i])
       }
     }
-    await Promise.all(routePromises.map(async ([promise, index]) => {
-        routes[index][1] = await promise
-    }))
+    if (routePromises.length > 0) {
+      console.log("Awaiting Route Promises")
+      await Promise.all(routePromises.map(async ([promise, index]) => {
+          routes[index][1] = await promise
+      }))
+    }
 
     routes.forEach(([path, output]) => {
       if (path === 'index') { // Router Hook
