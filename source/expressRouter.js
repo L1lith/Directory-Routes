@@ -35,8 +35,8 @@ function expressRouter(path, callback) {
         if (typeof output.middleware == 'function') {
           output.middleware = [output.middleware]
         } else if (output.hasOwnProperty('middleware') && (!Array.isArray(output.middleware) || output.middleware.some(middleware => typeof middleware != 'function'))) throw `Invalid Middleware For Route ${JSON.stringify(path)}`
-        if (output.hasOwnProperty('method') && !validRouteMethods.includes(output.method)) throw `Invalid Route Method For Route ${JSON.stringify(path)}`
-        router[output.method || 'get']('/' + path, ...output.middleware || [], output.handler)
+        if (output.hasOwnProperty('method') && (typeof output.method != 'string' || !validRouteMethods.includes(output.method.toLowerCase()))) throw `Invalid Route Method For Route ${JSON.stringify(path)}`
+        router[output.method ? output.method.toLowerCase() : 'get']('/' + path, ...output.middleware || [], output.handler)
       } else if (typeof output == 'function') {
         router.get('/' + path, output)
       } else {
