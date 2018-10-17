@@ -18,11 +18,11 @@ function expressRouter() {
       [path, callback] = arguments
     }
   }
-  if (resources instanceof Promise) resources = await resources
   if (typeof path != 'string' || path.length < 1) throw new Error("Path Argument must be a String.")
   if (callback !== null && typeof callback != 'function') throw new Error("Callback Argument Must be a Function or Null.")
   if (typeof resources != 'object') throw new Error("Resources Argument must be an Object or Null.")
   const result = (async () => {
+    if (resources instanceof Promise) resources = await resources
     const router = new Router()
     const routes = await directoryRoutes(path)
     const routePromises = []
