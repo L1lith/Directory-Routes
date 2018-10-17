@@ -40,7 +40,8 @@ function expressRouter() {
       }))
     }
 
-    routes.forEach(([path, output]) => {
+    for (let i = 0; i < routes.length; i++) {
+      const [path, output] = routes[i]
       if (path === 'index') { // Router Hook
         if (typeof output != 'function') throw `Router Hook Must Be A Function`
         output(router)
@@ -59,7 +60,7 @@ function expressRouter() {
       } else {
         throw `Invalid Route Handler for Route ${JSON.stringify(path)}`
       }
-    })
+    }
 
     return router
   })()
