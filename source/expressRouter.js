@@ -54,9 +54,9 @@ function expressRouter() {
           output.middleware = [output.middleware]
         } else if (output.hasOwnProperty('middleware') && (!Array.isArray(output.middleware) || output.middleware.some(middleware => typeof middleware != 'function'))) throw `Invalid Middleware For Route ${JSON.stringify(path)}`
         if (output.hasOwnProperty('method') && (typeof output.method != 'string' || !validRouteMethods.includes(output.method.toLowerCase()))) throw `Invalid Route Method For Route ${JSON.stringify(path)}`
-        router[output.method ? output.method.toLowerCase() : 'get']('/' + path, ...output.middleware || [], output.handler)
+        router[output.method ? output.method.toLowerCase() : 'get']('/' + path, ...output.middleware || [], handleRoutePromises(output.handler))
       } else if (typeof output == 'function') {
-        router.get('/' + path, output.handler)
+        router.get('/' + path, handleRoutePromises(output.handler))
       } else {
         throw `Invalid Route Handler for Route ${JSON.stringify(path)}`
       }
@@ -72,6 +72,15 @@ function expressRouter() {
     })
   } else {
     return result
+  }
+}
+
+function handleRoutePromises(handler) {
+  return (req, res, next) => {
+    const output = handler(req, res, next)
+    if (output instanceof Promise) {
+      output.then(()=>{}).catch(next)
+    }
   }
 }
 
