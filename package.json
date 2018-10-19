@@ -1,6 +1,6 @@
 {
   "name": "directory-routes",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "HTTP Server Local Directory Routing",
   "main": "source/index.js",
   "scripts": {
