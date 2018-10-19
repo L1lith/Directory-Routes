@@ -1,44 +1,12 @@
 const directoryRoutes = require('./directoryRoutes')
-const {
-  Router
-} = require('express')
+const {Router} = require('express')
 
 const validRouteMethods = ["checkout", "copy", "delete", "get", "head", "lock", "merge", "mkactivity", "mkcol", "move", "m-search", "notify", "options", "patch", "post", "purge", "put", "report", "search", "subscribe", "trace", "unlock", "unsubscribe"]
 
 function expressRouter() {
-  if (arguments.length > 3) throw new Error("Too many arguments")
-  if (arguments.length < 1) throw new Error("Missing Path Arguments")
-  let resources = path = callback = null
-  if (arguments.length === 3) {
-    [path, resources, callback] = arguments
-  } else if (arguments.length === 2) {
-    if (typeof arguments[1] == 'object' && arguments[1] !== null) {
-      [path, resources] = arguments
-    } else {
-      [path, callback] = arguments
-    }
-  }
-  if (typeof path != 'string' || path.length < 1) throw new Error("Path Argument must be a String.")
-  if (callback !== null && typeof callback != 'function') throw new Error("Callback Argument Must be a Function or Null.")
-  if (typeof resources != 'object') throw new Error("Resources Argument must be an Object or Null.")
   const result = (async () => {
-    if (resources instanceof Promise) resources = await resources
     const router = new Router()
-    const routes = await directoryRoutes(path)
-    const routePromises = []
-    for (let i = 0; i < routes.length; i++) {
-      const route = routes[i]
-      const [path, output] = route
-      if (output instanceof Promise) {
-          routePromises.push([output, i])
-      }
-    }
-    if (routePromises.length > 0) {
-      console.log("Awaiting Route Promises")
-      await Promise.all(routePromises.map(async ([promise, index]) => {
-          routes[index][1] = await promise
-      }))
-    }
+    const routes = await directoryRoutes(...arguments)
 
     for (let i = 0; i < routes.length; i++) {
       const [path, output] = routes[i]

@@ -16,6 +16,7 @@ function getDirectoryRoutes(directory, callback) {
       const [route, data] = output[i]
       if (data instanceof Promise) output[i][1] = await data
     }
+    return output
   })()
   if (typeof callback == 'function') {
     result.then(routes => {
@@ -28,7 +29,7 @@ function getDirectoryRoutes(directory, callback) {
 }
 
 async function getDirectoryRoutesWithResourceSupport(directory) {
-  if (arguments.length < 3) throw new Error("Too Many Arguments")
+  if (arguments.length > 3) throw new Error("Too Many Arguments")
   let resources = callback = null
   if (arguments.length === 3 ) {
     resources = arguments[1]
@@ -40,7 +41,7 @@ async function getDirectoryRoutesWithResourceSupport(directory) {
   }
   if (typeof resources != 'object') throw new Error("Resources must be an Object or Null!")
   if (callback !== null && typeof callback != 'function') throw new Error("Callback must be a Function or Null")
-  const routes = await directoryRoutes(directory)
+  const routes = await getDirectoryRoutes(directory)
   for (let i = 0; i < routes.length; i++) {
     const [route, data] = routes[i]
     if (typeof data == 'object' && data !== null && data.withResources === true) {
