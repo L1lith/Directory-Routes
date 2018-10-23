@@ -1,4 +1,5 @@
 const directoryRoutes = require('./directoryRoutes')
+const parseArgs = require('./parseArgs')
 const {Router} = require('express')
 
 const validRouteMethods = ["checkout", "copy", "delete", "get", "head", "lock", "merge", "mkactivity", "mkcol", "move", "m-search", "notify", "options", "patch", "post", "purge", "put", "report", "search", "subscribe", "trace", "unlock", "unsubscribe"]
@@ -6,14 +7,19 @@ const validRouteMethods = ["checkout", "copy", "delete", "get", "head", "lock", 
 function expressRouter() {
   const result = (async () => {
     const router = new Router()
-    const routes = await directoryRoutes(...arguments)
+    let {directory, options, callback} = parseArgs([...arguments])
+    options.handleResources = false
+    const routes = await directoryRoutes(directory, options, callback)
+
+    const resources = await options.resources
 
     for (let i = 0; i < routes.length; i++) {
       const [path, output] = routes[i]
-      if (path === 'index') { // Router Hook
-        if (typeof output != 'function') throw `Router Hook Must Be A Function`
-        output(router)
-      }
+      // if (path === 'index') { // Router Hook
+      //   if (typeof output != 'function') throw `Router Hook Must Be A Function`
+      //   output(router)
+      // } TODO: Fix router hook by giving it priority
+
       if (typeof output == 'object' && output !== null) {
         if (!output.hasOwnProperty('handler')) throw `Missing Route Handler Property For Route ${JSON.stringify(path)}`
         if (output.withResources === true) output.handler = await output.handler(resources)
@@ -38,9 +44,8 @@ function expressRouter() {
     }).catch(err => {
       callback(err, null)
     })
-  } else {
-    return result
   }
+  return result
 }
 
 function handleRoutePromises(handler) {
