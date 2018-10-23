@@ -26,7 +26,21 @@ function expressRouter() {
         if (typeof output.handler != 'function') throw `Invalid Route Handler Property For Route ${JSON.stringify(path)}`
         if (typeof output.middleware == 'function') {
           output.middleware = [output.middleware]
-        } else if (output.hasOwnProperty('middleware') && (!Array.isArray(output.middleware) || output.middleware.some(middleware => typeof middleware != 'function'))) throw `Invalid Middleware For Route ${JSON.stringify(path)}`
+        } else if (output.hasOwnProperty('middleware') && !Array.isArray(output.middleware)) throw `Invalid Middleware For Route ${JSON.stringify(path)}`
+        for (let i = 0; i < output.middleware.length; i++) {
+          let middleware = await output.middleware[i]
+          if (typeof middleware == 'object' && middleware !== null) {
+            if (typeof middleware.handler != 'function') throw new Error("Middleware Handler must be a function.")
+            if (middleware.hasOwnProperty('withResources') && typeof middleware.withResources != 'boolean') throw new Error("withResources must be a boolean.")
+            if (middleware.withResources === true) {
+              output.middleware[i] = await middleware.handler(resources)
+            } else {
+              oput.middleware[i] = middleware.handler
+            }
+          } else if (typeof middleware != 'function') {
+            throw new Error("Middleware must be a Function or an Object with a handler Function.")
+          }
+        }
         if (output.hasOwnProperty('method') && (typeof output.method != 'string' || !validRouteMethods.includes(output.method.toLowerCase()))) throw `Invalid Route Method For Route ${JSON.stringify(path)}`
         router[output.method ? output.method.toLowerCase() : 'get']('/' + path, ...output.middleware || [], handleRoutePromises(output.handler))
       } else if (typeof output == 'function') {
