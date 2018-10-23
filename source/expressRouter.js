@@ -35,8 +35,9 @@ function expressRouter() {
             if (middleware.withResources === true) {
               output.middleware[i] = await middleware.handler(resources)
             } else {
-              oput.middleware[i] = middleware.handler
+              output.middleware[i] = middleware.handler
             }
+            if (middleware.handlePromises === true) output.middleware[i] = handleRoutePromises(output.middleware[i])
           } else if (typeof middleware != 'function') {
             throw new Error("Middleware must be a Function or an Object with a handler Function.")
           }
