@@ -6,7 +6,7 @@ function directoryRoutes() {
   const {directory, options, callback} = parseArgs([...arguments])
   const result = (async () => {
     const output = []
-    dirTree(directory, {extensions: /\.js$/}, item => {
+    dirTree(directory, {extensions: /\.(js|ts)*/}, item => {
       let route = relative(directory, item.path)
       route = route.substring(0, route.length - '.js'.length)
       const data = require(item.path)
