@@ -1,10 +1,15 @@
 const directoryRoutes = require('./directoryRoutes')
 const parseArgs = require('./parseArgs')
-const {Router} = require('express')
-
+let expressError = null
+try {
+  const {Router} = require('express')
+} catch (error) {
+  expressError = error
+}
 const validRouteMethods = ["checkout", "copy", "delete", "get", "head", "lock", "merge", "mkactivity", "mkcol", "move", "m-search", "notify", "options", "patch", "post", "purge", "put", "report", "search", "subscribe", "trace", "unlock", "unsubscribe"]
 
 function expressRouter() {
+  if (expressError !== null) throw expressError
   const result = (async () => {
     const router = new Router()
     let {directory, options, callback} = parseArgs([...arguments])
