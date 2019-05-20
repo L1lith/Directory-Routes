@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/L1lith/Directory-Routes#readme",
   "dependencies": {
-    "directory-tree": "^2.1.0",
+    "directory-tree": "^2.1.0"
   },
   "optionalDependencies": {
     "express": "^4.17.0"
