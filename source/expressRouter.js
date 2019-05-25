@@ -22,7 +22,7 @@ function expressRouter() {
     const resources = await options.resources
 
     for (let i = 0; i < routes.length; i++) {
-      const [path, output] = routes[i]
+      let [path, output] = routes[i]
       // if (path === 'index') { // Router Hook
       //   if (typeof output != 'function') throw `Router Hook Must Be A Function`
       //   output(router)
