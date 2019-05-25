@@ -1,9 +1,10 @@
 const directoryRoutes = require('./directoryRoutes')
 const parseArgs = require('./parseArgs')
+let Router
 
 let expressError = null
 try {
-  const {Router} = require('express')
+  Router = require('express').Router
 } catch (error) {
   expressError = error
 }
