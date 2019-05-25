@@ -28,6 +28,8 @@ function expressRouter() {
       //   output(router)
       // } TODO: Fix router hook by giving it priority
 
+      if (typeof output == 'function') output = {handler: output}
+
       if (typeof output == 'object' && output !== null) {
         if (!output.hasOwnProperty('handler')) throw `Missing Route Handler Property For Route ${JSON.stringify(path)}`
         if (output.withResources === true) output.handler = await output.handler(resources)
@@ -35,6 +37,7 @@ function expressRouter() {
         if (typeof output.middleware == 'function') {
           output.middleware = [output.middleware]
         } else if (output.hasOwnProperty('middleware') && !Array.isArray(output.middleware)) throw `Invalid Middleware For Route ${JSON.stringify(path)}`
+        if (!output.hasOwnProperty('middleware')) output.middleware = []
         for (let i = 0; i < output.middleware.length; i++) {
           let middleware = await output.middleware[i]
           if (typeof middleware == 'object' && middleware !== null) {
