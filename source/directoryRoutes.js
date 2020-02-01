@@ -1,6 +1,7 @@
 const dirTree = require('directory-tree')
 const parseArgs = require('./parseArgs')
 const {relative} = require('path')
+const slash = require('slash')
 
 function directoryRoutes() {
   const {directory, options, callback} = parseArgs([...arguments])
@@ -9,6 +10,7 @@ function directoryRoutes() {
     dirTree(directory, {extensions: /\.(js|ts)*/}, item => {
       let route = relative(directory, item.path)
       route = route.substring(0, route.length - '.js'.length)
+      route = slash(route)
       const data = require(item.path)
       output.push([route, data])
     })
