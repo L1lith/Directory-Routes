@@ -4,12 +4,24 @@ const {relative} = require('path')
 const slash = require('slash')
 
 function directoryRoutes() {
-  const {directory, options, callback} = parseArgs([...arguments])
+  const {directory, options={}, callback=null} = parseArgs([...arguments])
+  const {fileTypes=["js", "ts"], stripExtensions=true} = options
+  if (typeof stripExtensions != 'boolean') throw new Error("stripExtensions must be a boolean")
+  if (fileTypes !== null && (!Array.isArray(fileTypes) || fileTypes.some(fileType => typeof fileType != "string" || fileType.length < 1))) throw new Error("fileTypes must be an array of non-empty file type strings")
+  if (options === null) options = {}
+
   const result = (async () => {
     const output = []
-    dirTree(directory, {extensions: /\.(js|ts)*/}, item => {
+    const dirTreeOptions = {}
+    if (fileTypes) {
+      dirTreeOptions.extensions = new RegExp(`(\.${fileTypes.join("|")})\$`,'i')
+    }
+    dirTree(directory, dirTreeOptions, item => {
       let route = relative(directory, item.path)
-      route = route.substring(0, route.length - '.js'.length)
+      //route = route.substring(0, route.length - '.js'.length)
+      if (stripExtensions === true) {
+        route = route.split('/').slice(0, -1).join('/')
+      }
       route = slash(route)
       const data = require(item.path)
       output.push([route, data])
